@@ -1,0 +1,16 @@
+# smb.conf - Samba Configuration
+
+[global]
+   workgroup = WORKGROUP
+   security = user
+   map to guest = Bad User
+   server string = Samba Server
+   log file = /var/log/samba/log.%m
+   max log size = 50
+
+[production]
+   path = /sambashare
+   browseable = yes
+   writable = yes
+   guest ok = no
+   valid users = @sambausers

@@ -1,0 +1,7 @@
+---
+# vars/main.yml
+samba_users:
+  - etudiant1
+  - etudiant2
+samba_share_path: /sambashare
+samba_share_name: production

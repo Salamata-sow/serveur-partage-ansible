@@ -1,0 +1,6 @@
+---
+- name: Déployer un serveur Samba
+  hosts: server1
+  become: yes
+  roles:
+    - samba

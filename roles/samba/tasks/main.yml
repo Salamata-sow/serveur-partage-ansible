@@ -1,0 +1,55 @@
+#SPDX-License-Identifier: MIT-0
+
+# tasks file for samba
+# tasks/main.yml
+- name: Install Samba
+  ansible.builtin.apt:
+    name: samba
+    state: latest
+  # Pas besoin de condition "when" car Ubuntu fait partie de "Debian" par défaut
+
+- name: Create Samba group
+  ansible.builtin.group:
+    name: sambausers
+    state: present
+
+- name: Create Samba users
+  ansible.builtin.user:
+    name: "{{ item }}"
+    shell: /sbin/nologin
+    groups: sambausers
+    append: yes
+    create_home: no
+  loop:
+    - etudiant1
+    - etudiant2
+
+- name: Create the Samba shared directory
+  ansible.builtin.file:
+    path: /sambashare
+    state: directory
+    owner: root
+    group: sambausers
+    mode: "2775"
+
+- name: Set Samba user password
+  ansible.builtin.shell: smbpasswd -a -s {{ item }}
+  args:
+    stdin: "password\npassword"
+  loop:
+    - etudiant1
+    - etudiant2
+
+- name: Enable Samba users
+  ansible.builtin.shell: smbpasswd -e {{ item }}
+  loop:
+    - etudiant1
+    - etudiant2
+
+- name: Configure smb.conf for Samba share
+  ansible.builtin.template:
+    src: smb.conf.j2
+    dest: /etc/samba/smb.conf
+  notify:
+    - restart samba service
+    - restart samba service (nmbd)

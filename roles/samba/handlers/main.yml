@@ -1,0 +1,14 @@
+#SPDX-License-Identifier: MIT-0
+# handlers file for samba
+# handlers/main.yml
+- name: restart samba service
+  ansible.builtin.service:
+    name: smbd
+    state: restarted
+    enabled: yes
+
+- name: restart samba service (nmbd)
+  ansible.builtin.service:
+    name: nmbd
+    state: restarted
+    enabled: yes
