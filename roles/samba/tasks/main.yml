@@ -50,6 +50,12 @@
   ansible.builtin.template:
     src: smb.conf.j2
     dest: /etc/samba/smb.conf
-  notify:
-    - restart samba service
-    - restart samba service (nmbd)
+    
+- name: Restart smbd service to apply new configuration
+  service:
+    use: "service"
+    name: "smbd"
+    state: "restarted"
+    enabled: yes
+
+
